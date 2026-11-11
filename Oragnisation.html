@@ -1,0 +1,137 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Diagramme de dépendance du projet</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #eef4ff, #f9fafb);
+      margin: 0;
+      padding: 30px;
+      color: #1f2937;
+    }
+    .container {
+      max-width: 1300px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 18px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+      padding: 25px 28px;
+    }
+    h1 {
+      text-align: center;
+      color: #1e3a8a;
+      margin-bottom: 25px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+    }
+    .module {
+      border: 2px solid #dbeafe;
+      border-radius: 14px;
+      background: linear-gradient(180deg, #f8fbff, #f4f9ff);
+      padding: 18px;
+      min-height: 220px;
+    }
+    .module h2 {
+      margin: 0 0 12px 0;
+      color: #1d4ed8;
+      font-size: 1.1em;
+    }
+    .func {
+      background: #edf6ff;
+      border-left: 4px solid #3b82f6;
+      border-radius: 8px;
+      padding: 9px 10px;
+      margin: 8px 0;
+      font-family: "Courier New", monospace;
+      font-size: 0.92em;
+      line-height: 1.4;
+    }
+    .call {
+      background: #eefbf3;
+      border-left: 4px solid #22c55e;
+      border-radius: 8px;
+      padding: 9px 10px;
+      margin-top: 10px;
+      font-size: 0.9em;
+      line-height: 1.5;
+    }
+    .global {
+      margin-top: 20px;
+      border: 2px solid #f7d7a1;
+      background: #fffaf2;
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .global h2 {
+      color: #b45309;
+      margin-top: 0;
+    }
+    .arrow {
+      color: #6366f1;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Diagramme de dépendance du projet</h1>
+
+    <div class="grid">
+      <div class="module">
+        <h2>main.c</h2>
+        <div class="func">main(void)</div>
+        <div class="call"><span class="arrow">→</span> appelle : charger_stock(...), sauvegarder_stock(...), menu_client(...), menu_admin(...)</div>
+      </div>
+
+      <div class="module">
+        <h2>stock.c / stock.h</h2>
+        <div class="func">charger_stock(const char *chemin, Produit **stock, int *nb_produits)</div>
+        <div class="func">sauvegarder_stock(const char *chemin, const Produit *stock, int nb_produits)</div>
+        <div class="func">lister_categories(const Produit *stock, int nb_produits)</div>
+        <div class="func">afficher_stock_par_categorie(const Produit *stock, int nb_produits, const char *categorie)</div>
+        <div class="call"><span class="arrow">→</span> lit / écrit : stock.txt</div>
+      </div>
+
+      <div class="module">
+        <h2>file.c / file.h</h2>
+        <div class="func">init_file(File *f)</div>
+        <div class="func">est_vide(const File *f)</div>
+        <div class="func">enqueue(File *f, int id, const char *nom, const char *adr, float total, int priorite)</div>
+        <div class="func">dequeue(File *f)</div>
+        <div class="func">afficher_file(const File *f)</div>
+        <div class="func">liberer_file(File *f)</div>
+      </div>
+
+      <div class="module">
+        <h2>client.c / client.h</h2>
+        <div class="func">menu_client(Produit *stock, int nb_produits, File *f1, File *f2, int *id_compteur)</div>
+        <div class="call"><span class="arrow">→</span> appelle : lister_categories(...), afficher_stock_par_categorie(...), enqueue(...), afficher_file(...)</div>
+      </div>
+
+      <div class="module">
+        <h2>admin.c / admin.h</h2>
+        <div class="func">nom_fichier_journalier(char *buffer, size_t size)</div>
+        <div class="func">archiver_commande(const NoeudCommande *cmd)</div>
+        <div class="func">expedier_commande(File *f, float *ca)</div>
+        <div class="func">ordonnancer_livraisons(File *f1, File *f2, float *ca)</div>
+        <div class="func">reapprovisionner(Produit *stock, int nb_produits)</div>
+        <div class="func">menu_admin(File *f1, File *f2, Produit *stock, int nb_produits, float *chiffre_affaires)</div>
+      </div>
+    </div>
+
+    <div class="global">
+      <h2>Appels inter-fichiers</h2>
+      <div class="call"><span class="arrow">main.c</span> → stock.c, client.c, admin.c</div>
+      <div class="call"><span class="arrow">client.c</span> → stock.c, file.c</div>
+      <div class="call"><span class="arrow">admin.c</span> → stock.c, file.c</div>
+      <div class="call"><span class="arrow">stock.c</span> → stock.txt</div>
+      <div class="call"><span class="arrow">types.h</span> est partagé par tous les modules</div>
+    </div>
+  </div>
+</body>
+</html>

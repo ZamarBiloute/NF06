@@ -1,0 +1,12 @@
+Ordinateur_Portable;Informatique;899.99;10
+Souris_Ergonomique;Informatique;29.90;35
+Clavier_Mecanique;Informatique;65.00;20
+Ecran_24_Pouces;Informatique;149.50;15
+Roman_Policier;Livre;12.50;50
+Manuel_Physique;Livre;45.00;18
+Bande_Dessinee;Livre;16.20;30
+Veste_Impermeable;Textile;89.00;11
+Jean_Denim;Textile;49.90;40
+T-Shirt_Coton;Textile;15.00;75
+Cafetiere_Filtre;Electromenager;39.99;22
+Robot_Mixeur;Electromenager;79.90;14
