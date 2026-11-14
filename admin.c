@@ -30,7 +30,7 @@ static void archiver_commande(const NoeudCommande *cmd) {
 }
 
 static void expedier_commande(File *f, float *ca) {
-    NoeudCommande *cmd = dequeue(f);
+    NoeudCommande *cmd = Retirer_une_commande(f);
     if (!cmd) return;
 
     archiver_commande(cmd);

@@ -36,7 +36,7 @@ void Ajouter_une_commande(File *f, int id, const char *nom, const char *adr, flo
     f->taille++;
 }
 
-NoeudCommande* dequeue(File *f) {
+NoeudCommande* Retirer_une_commande(File *f) {
     if (est_vide(f)) return NULL;
 
     NoeudCommande *temp = f->tete;
@@ -64,7 +64,7 @@ void afficher_file(const File *f) {
 
 void liberer_file(File *f) {
     while (!est_vide(f)) {
-        NoeudCommande *n = dequeue(f);
+        NoeudCommande *n = Retirer_une_commande(f);
         free(n);
     }
 }
