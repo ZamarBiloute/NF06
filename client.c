@@ -2,7 +2,7 @@
 #include <string.h>
 #include "client.h"
 #include "stock.h"
-#include "file.h"
+#include "Commande.h"
 
 void menu_client(File *f1, File *f2, int *id_compteur) {
     ArticlePanier panier[MAX_ARTICLES_PANIER];

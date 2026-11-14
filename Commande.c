@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "file.h"
+#include "Commande.h"
 
 void init_file(File *f) {
     f->tete = NULL;

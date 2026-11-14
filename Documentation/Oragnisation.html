@@ -98,7 +98,7 @@
       </div>
 
       <div class="module">
-        <h2>file.c / file.h</h2>
+        <h2>Commande.c / Commande.h</h2>
         <div class="func">init_file(File *f)</div>
         <div class="func">est_vide(const File *f)</div>
         <div class="func">Ajouter_une_commande(File *f, int id, const char *nom, const char *adr, float total, int priorite)</div>
@@ -127,8 +127,8 @@
     <div class="global">
       <h2>Appels inter-fichiers</h2>
       <div class="call"><span class="arrow">main.c</span> → stock.c, client.c, admin.c</div>
-      <div class="call"><span class="arrow">client.c</span> → stock.c, file.c</div>
-      <div class="call"><span class="arrow">admin.c</span> → stock.c, file.c</div>
+      <div class="call"><span class="arrow">client.c</span> → stock.c, Commande.c</div>
+      <div class="call"><span class="arrow">admin.c</span> → stock.c, Commande.c</div>
       <div class="call"><span class="arrow">stock.c</span> → stock.txt</div>
       <div class="call"><span class="arrow">types.h</span> est partagé par tous les modules</div>
     </div>
