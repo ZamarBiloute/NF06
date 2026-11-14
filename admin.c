@@ -103,9 +103,9 @@ void menu_admin(File *f1, File *f2, float *ca) {
         switch (choix) {
             case 1:
                 printf("\nFile Prioritaire (P1 - %d cmd):\n", f1->taille);
-                afficher_file(f1);
+                Afficher_commande(f1);
                 printf("\nFile Standard (P2 - %d cmd):\n", f2->taille);
-                afficher_file(f2);
+                Afficher_commande(f2);
                 break;
             case 2:
                 ordonnancer_livraisons(f1, f2, ca);

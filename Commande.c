@@ -49,7 +49,7 @@ NoeudCommande* Retirer_une_commande(File *f) {
     return temp;
 }
 
-void afficher_file(const File *f) {
+void Afficher_commande(const File *f) {
     if (est_vide(f)) {
         printf(" (File vide)\n");
         return;
