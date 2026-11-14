@@ -65,26 +65,6 @@ static void ordonnancer_livraisons(File *f1, File *f2, float *ca) {
     }
 }
 
-static void reapprovisionner(void) {
-    int idx, qte;
-    printf("\nIndex du produit a reapprovisionner : ");
-    if (scanf("%d", &idx) != 1 || idx < 0 || idx >= nb_produits_global) {
-        printf("Index invalide.\n");
-        while (getchar() != '\n');
-        return;
-    }
-    printf("Quantite a ajouter : ");
-    if (scanf("%d", &qte) != 1 || qte <= 0) {
-        printf("Quantite invalide.\n");
-        while (getchar() != '\n');
-        return;
-    }
-
-    stock_global[idx].stock += qte;
-    printf("Reapprovisionnement effectue. Nouveau stock pour %s : %d\n",
-           stock_global[idx].nom, stock_global[idx].stock);
-}
-
 void menu_admin(File *f1, File *f2, float *ca) {
     int choix = 0;
     do {
@@ -92,8 +72,7 @@ void menu_admin(File *f1, File *f2, float *ca) {
         printf("1. Visualiser les files d'attente (P1 & P2)\n");
         printf("2. Traiter le prochain lot d'expeditions (2 P1 / 1 P2)\n");
         printf("3. Afficher le chiffre d'affaires cumule\n");
-        printf("4. Reapprovisionner un produit\n");
-        printf("5. Retour au menu principal\n");
+        printf("4. Retour au menu principal\n");
         printf("Choix : ");
         if (scanf("%d", &choix) != 1) {
             while (getchar() != '\n');
@@ -114,12 +93,9 @@ void menu_admin(File *f1, File *f2, float *ca) {
                 printf("\nChiffre d'affaires cumule de la session : %.2f EUR\n", *ca);
                 break;
             case 4:
-                reapprovisionner();
-                break;
-            case 5:
                 break;
             default:
                 printf("Choix invalide.\n");
         }
-    } while (choix != 5);
+    } while (choix != 4);
 }

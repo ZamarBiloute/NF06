@@ -99,7 +99,7 @@
 
       <div class="module">
         <h2>Commande.c / Commande.h</h2>
-        <div class="func">init_file(File *f)</div>
+        <div class="func">initialisation_commande(File *f)</div>
         <div class="func">est_vide(const File *f)</div>
         <div class="func">Ajouter_une_commande(File *f, int id, const char *nom, const char *adr, float total, int priorite)</div>
         <div class="func">Retirer_une_commande(File *f)</div>
@@ -119,7 +119,6 @@
         <div class="func">archiver_commande(const NoeudCommande *cmd)</div>
         <div class="func">expedier_commande(File *f, float *ca)</div>
         <div class="func">ordonnancer_livraisons(File *f1, File *f2, float *ca)</div>
-        <div class="func">reapprovisionner(Produit *stock, int nb_produits)</div>
         <div class="func">menu_admin(File *f1, File *f2, Produit *stock, int nb_produits, float *chiffre_affaires)</div>
       </div>
     </div>

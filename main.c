@@ -17,8 +17,8 @@ int main(void) {
 
     File file_prioritaire;
     File file_standard;
-    init_file(&file_prioritaire);
-    init_file(&file_standard);
+    initialisation_commande(&file_prioritaire);
+    initialisation_commande(&file_standard);
 
     int id_commande = 1001;
     float chiffre_affaires = 0.0f;

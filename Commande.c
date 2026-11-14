@@ -3,7 +3,7 @@
 #include <string.h>
 #include "Commande.h"
 
-void init_file(File *f) {
+void initialisation_commande(File *f) {
     f->tete = NULL;
     f->queue = NULL;
     f->taille = 0;
