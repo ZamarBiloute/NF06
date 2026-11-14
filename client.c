@@ -103,9 +103,9 @@ void menu_client(File *f1, File *f2, int *id_compteur) {
 
             int id = (*id_compteur)++;
             if (priorite == 1) {
-                enqueue(f1, id, nom, adr, total, priorite);
+                Ajouter_une_commande(f1, id, nom, adr, total, priorite);
             } else {
-                enqueue(f2, id, nom, adr, total, priorite);
+                Ajouter_une_commande(f2, id, nom, adr, total, priorite);
             }
 
             printf("\nCommande #%d validee et inseree dans la file d'expedition !\n", id);

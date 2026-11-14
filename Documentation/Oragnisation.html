@@ -101,7 +101,7 @@
         <h2>file.c / file.h</h2>
         <div class="func">init_file(File *f)</div>
         <div class="func">est_vide(const File *f)</div>
-        <div class="func">enqueue(File *f, int id, const char *nom, const char *adr, float total, int priorite)</div>
+        <div class="func">Ajouter_une_commande(File *f, int id, const char *nom, const char *adr, float total, int priorite)</div>
         <div class="func">dequeue(File *f)</div>
         <div class="func">afficher_file(const File *f)</div>
         <div class="func">liberer_file(File *f)</div>
@@ -110,7 +110,7 @@
       <div class="module">
         <h2>client.c / client.h</h2>
         <div class="func">menu_client(Produit *stock, int nb_produits, File *f1, File *f2, int *id_compteur)</div>
-        <div class="call"><span class="arrow">→</span> appelle : lister_categories(...), afficher_stock_par_categorie(...), enqueue(...), afficher_file(...)</div>
+        <div class="call"><span class="arrow">→</span> appelle : lister_categories(...), afficher_stock_par_categorie(...), Ajouter_une_commande(...), afficher_file(...)</div>
       </div>
 
       <div class="module">
