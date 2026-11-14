@@ -84,7 +84,7 @@ void lister_categories(void) {
     }
 }
 
-void afficher_stock_par_categorie(const char *categorie) {
+void lister_produit_par_categorie(const char *categorie) {
     printf("\n--- Produits [%s] ---\n", categorie);
     for (int i = 0; i < nb_produits_global; i++) {
         if (strcmp(stock_global[i].categorie, categorie) == 0) {

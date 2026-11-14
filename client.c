@@ -29,7 +29,7 @@ void menu_client(File *f1, File *f2, int *id_compteur) {
             while (getchar() != '\n');
             if (fgets(cat, sizeof(cat), stdin)) {
                 cat[strcspn(cat, "\r\n")] = 0;
-                afficher_stock_par_categorie(cat);
+                lister_produit_par_categorie(cat);
             }
         } else if (choix == 2) {
             if (nb_panier >= MAX_ARTICLES_PANIER) {
