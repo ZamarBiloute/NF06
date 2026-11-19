@@ -14,7 +14,7 @@ void Afficher_Menu_Demarrage(void) {
   }
 
   system("cls");
-  printf("Programme e_commerce version %d.%d.%d\n", VERSION_MAJEUR, 
+  printf("Programme e-commerce version %d.%d.%d\n", VERSION_MAJEUR, 
                                                     VERSION_MINEUR, 
                                                     VERSION_PATCH);
   printf("Projet - système de gestion des livraisons e-commerce en C\n");

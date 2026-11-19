@@ -2,11 +2,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "tools.h"
 #include "stock.h"
 #include "data.h"
 #include "Const.h"
 
 Produit * stock = NULL;
+FILE *file = NULL;
+
+// Liste des fonctions internes à ce fichier
+unsigned int OpenCheckStockFileAndReturnProductCount(void);
 
 // Fonction qui permet de charger en mémoire le stock qui est defini 
 // dans le fichier stock.txt
@@ -20,79 +25,91 @@ Produit * stock = NULL;
 // ------------------------------------------------------------------
 
 bool charger_stock(void) {
-    // Variable locales
-    bool Result = true;
-    int nombre_lignes = 0;
-    int nombre_caracteres = 0;
-    char caractere, dernier_caractere;
-    long size = 0;
+  
+  /* Variables locales */
+  bool Result = true;
+  int nombre_produits = 0;
 
+  /* Point d'entree */
+  nombre_produits = OpenCheckStockFileAndReturnProductCount();
+  if (nombre_produits > 0) 
+  {
+      // Allocation dynamique de mémoire pour le stock
+      stock = malloc(nombre_produits * sizeof(Produit));
+      if (stock == NULL) {
+          Afficher_msg_debug("Problème d'allocation mémoire pour le stock\n");
+          fclose(file);
+          Result = false;
+      } else {
+          for (int i = 0; i < nombre_produits; i++) {
+              if (fscanf(file, "%99[^;];%99[^;];%f;%d\n", stock[i].categorie, stock[i].nom, &stock[i].prix, &stock[i].stock) != 4) {
+                  // Les 4 champs n'ont pu etre lus correctement, donc on considère que le chargement a échoué
+                  Afficher_msg_debug("Problème de lecture du fichier\n");
+                  Result = false;
+                  break;
+              }
+          }
+      }
+  } else
+  {
+      Afficher_msg_debug("Aucun produit dans le fichier\n");
+      Result = false;
+  }
+  fclose(file);
+  if (Result == false) {
+      free(stock);
+      stock = NULL;
+  }
 
-    // Implémentation de la fonction pour charger le stock
-    // stock[0] = (Produit){"Produit1", "Categorie1", 10.0, 100};
-    // stock[1] = (Produit){"Produit2", "Categorie2", 20.0, 200};
-    // stock[2] = (Produit){"Produit3", "Categorie3", 30.0, 300};
-    FILE *file = fopen(NOM_FICHIER_STOCK, "r");
-    if (file == NULL) {
-        printf("Pb pour ouvrir le fichier %s\n", NOM_FICHIER_STOCK);
-        Result = false;
-    } else {
+  /* Point de sortie */
+  return Result;
+}
+ 
+unsigned int OpenCheckStockFileAndReturnProductCount(void) {
 
-        // Vérifier si le fichier est vide
-        // pour cela, on se positionne à la fin du fichier et vérifie la position du curseur. 
-        // Si la position est 0, le fichier est vide.
-        if (fseek(file, 0, SEEK_END) == 0) {
-            size = ftell(file);
-            printf("Taille du fichier %ld\n",size);
-            if (size == 0) {
-                printf("Fichier %s vide\n", NOM_FICHIER_STOCK);
-                Result = false;
-                fclose(file);
-                return Result;
-            }
-        }
+  /* Variables locales */
+  unsigned long size = 0;
+  unsigned int nombre_lignes = 0;
+  unsigned int nombre_caracteres = 0;
+  char caractere, dernier_caractere;
 
-        //Pour pouvoir lire le fichier, on se positionne au début du fichier
+  /* Point d'entree */
+  file = fopen(NOM_FICHIER_STOCK, "r");
+
+  if (file != NULL) {
+    // Vérifier si le fichier est vide
+    // pour cela, on se positionne à la fin du fichier et vérifie la position du curseur. 
+    // Si la position est 0, le fichier est vide.
+    if (fseek(file, 0, SEEK_END) == 0) {
+      size = ftell(file);
+      Afficher_msg_debug("Taille du fichier %lu\n", size);
+      if (size == 0) {
+        Afficher_msg_debug("Fichier vide\n");
+        fclose(file);
+      } else 
+      {
+
+        //Pour pouvoir déterminer le nombre de lignes dans le fichier, on se positionne au début du fichier
         rewind(file);
 
         // Afin de définir une allocation dynamique de mémoire pour le stock, il nous faut déterminer le nombre de produit et donc le nombre de ligne dans le fichier.
         // Remarque : il faut tenir compte du cas ou la dernier ligne ne se termine pas par EOF et donc il faut qu'elle soit comptabilisée
         while ((caractere = fgetc(file)) != EOF) {
-            dernier_caractere = caractere;
-            nombre_caracteres ++;
-            if (caractere == '\n') {
-                nombre_lignes++;
-            }
+          dernier_caractere = caractere;
+          nombre_caracteres ++;
+          if (caractere == '\n') {
+              nombre_lignes++;
+          }
         }
         if ( (dernier_caractere != EOF) && (size == nombre_caracteres) )
             nombre_lignes++;
 
-        //Pour pouvoir lire le fichier, on se positionne au début du fichier
+        //Avant de quitter la fonction, on se positionne au début du fichier pour pouvoir le lire par la suite
         rewind(file);
-
-        // Allocation dynamique de mémoire pour le stock
-        stock = malloc(nombre_lignes * sizeof(Produit));
-        if (stock == NULL) {
-            printf("Problème d'allocation mémoire pour le stock\n");
-            fclose(file);
-            Result = false;
-        } else {
-            for (int i = 0; i < nombre_lignes; i++) {
-                if (fscanf(file, "%99[^;];%99[^;];%f;%d\n", stock[i].categorie, stock[i].nom, &stock[i].prix, &stock[i].stock) != 4) {
-                    // Les 4 champs n'ont pu etre lus correctement, donc on considère que le chargement a échoué
-                    printf("Problème de lecture du fichier %s\n", NOM_FICHIER_STOCK);
-                    Result = false;
-                    break;
-                }
-            }
-        }
-        if (Result == false) {
-            fclose(file);
-            free(stock);
-            stock = NULL;
-        }
-
-        fclose(file);
+      }
     }
-    return Result;
+  }
+
+  /* Point de sortie */
+  return nombre_lignes;
 }
