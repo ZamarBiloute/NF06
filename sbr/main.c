@@ -6,9 +6,10 @@
 
 int main(void) {
     Afficher_Menu_Demarrage();
-    charger_stock();
+    if (charger_stock() == false) {
+        fprintf(stderr, "Erreur lors du chargement du stock.\n");
+        return EXIT_FAILURE;
+    }
     printf("Nom du produit 1 : %s\n", stock[0].nom);
-    printf("Nom du produit 2 : %s\n", stock[1].nom);
-    printf("Nom du produit 3 : %s\n", stock[2].nom);
-
+    return EXIT_SUCCESS;
 }

@@ -12,5 +12,7 @@ typedef struct {
     int stock;
 } Produit;
 
-// Liste des varaibles globales utilisées dans le projet
-Produit stock[MAX_PRODUITS];
+// Liste des variables globales utilisées dans le projet
+
+// Pointeur de type Produit pour stocker le stock de produits
+extern Produit * stock;
