@@ -8,6 +8,7 @@
 #include "Const.h"
 
 Produit * stock = NULL;
+unsigned int nombre_produits = 0;
 FILE *file = NULL;
 
 // Liste des fonctions internes à ce fichier
@@ -28,7 +29,6 @@ bool charger_stock(void) {
   
   /* Variables locales */
   bool Result = true;
-  int nombre_produits = 0;
 
   /* Point d'entree */
   nombre_produits = OpenCheckStockFileAndReturnProductCount();
@@ -41,7 +41,7 @@ bool charger_stock(void) {
           fclose(file);
           Result = false;
       } else {
-          for (int i = 0; i < nombre_produits; i++) {
+          for (unsigned int i = 0; i < nombre_produits; i++) {
               if (fscanf(file, "%99[^;];%99[^;];%f;%d\n", stock[i].categorie, stock[i].nom, &stock[i].prix, &stock[i].stock) != 4) {
                   // Les 4 champs n'ont pu etre lus correctement, donc on considère que le chargement a échoué
                   Afficher_msg_debug("Problème de lecture du fichier\n");

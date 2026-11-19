@@ -16,3 +16,6 @@ typedef struct {
 
 // Pointeur de type Produit pour stocker le stock de produits
 extern Produit * stock;
+
+// Variable globale pour stocker le nombre de produits dans le stock
+extern unsigned int nombre_produits;

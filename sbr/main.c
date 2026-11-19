@@ -15,7 +15,7 @@ int main(void) {
         fprintf(stderr, "Erreur lors du chargement du stock.\n");
         return EXIT_FAILURE;
     }
-    printf("Nom du produit 1 : %s\n", stock[0].nom);
+    printf("Etat du stock actuel : %u produits chargés.\n", nombre_produits);
     
     /* Point de sortie */
     return EXIT_SUCCESS;
