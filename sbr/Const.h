@@ -33,3 +33,11 @@
 #define TOUCHE_2 50
 #define TOUCHE_1 49
 
+// Liste des choix du menu principale
+typedef enum{
+  CHOIX_MP_UNDEF,
+  CHOIX_MP_ESPACE_CLIENT,
+  CHOIX_MP_ESPACE_ADMIN,
+  CHOIX_MP_QUITTER
+} ENUM_CHOIX_MP;
+

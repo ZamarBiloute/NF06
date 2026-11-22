@@ -21,7 +21,23 @@ int main(void) {
     printf(ANSI_VERT "Etat du stock actuel : %u produits chargés." ANSI_RESET "\n", nombre_produits);
 
     choix_utilisateur = Affiche_Et_Gere_Menu_Principal();
-    printf("Choix de l'utilisateur : %u\n", choix_utilisateur);
+    switch (choix_utilisateur)
+    {
+        case CHOIX_MP_ESPACE_CLIENT:
+        {
+            Menu_Client();
+        } break;
+
+        case CHOIX_MP_ESPACE_ADMIN:
+        {
+
+        } break;
+
+        case CHOIX_MP_QUITTER:
+        {
+
+        } break;        
+    }
     /* Point de sortie */
     return EXIT_SUCCESS;
 }
