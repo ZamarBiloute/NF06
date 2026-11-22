@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 
+
 #if DEBUG_ACTIF
 void Afficher_msg_debug(const char *message, ...)
 {

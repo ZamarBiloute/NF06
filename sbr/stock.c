@@ -37,14 +37,14 @@ bool charger_stock(void) {
       // Allocation dynamique de mémoire pour le stock
       stock = malloc(nombre_produits * sizeof(Produit));
       if (stock == NULL) {
-          Afficher_msg_debug("Problème d'allocation mémoire pour le stock\n");
+          AFF_DEBUG("Problème d'allocation mémoire pour le stock\n");
           fclose(file);
           Result = false;
       } else {
           for (unsigned int i = 0; i < nombre_produits; i++) {
               if (fscanf(file, "%99[^;];%99[^;];%f;%d\n", stock[i].categorie, stock[i].nom, &stock[i].prix, &stock[i].stock) != 4) {
                   // Les 4 champs n'ont pu etre lus correctement, donc on considère que le chargement a échoué
-                  Afficher_msg_debug("Problème de lecture du fichier\n");
+                  AFF_DEBUG("Problème de lecture du fichier\n");
                   Result = false;
                   break;
               }
@@ -52,7 +52,7 @@ bool charger_stock(void) {
       }
   } else
   {
-      Afficher_msg_debug("Aucun produit dans le fichier\n");
+      AFF_DEBUG("Aucun produit dans le fichier\n");
       Result = false;
   }
   fclose(file);
@@ -82,9 +82,9 @@ unsigned int OpenCheckStockFileAndReturnProductCount(void) {
     // Si la position est 0, le fichier est vide.
     if (fseek(file, 0, SEEK_END) == 0) {
       size = ftell(file);
-      Afficher_msg_debug("Taille du fichier %lu\n", size);
+      AFF_DEBUG("Taille du fichier %lu\n", size);
       if (size == 0) {
-        Afficher_msg_debug("Fichier vide\n");
+        AFF_DEBUG("Fichier vide\n");
         fclose(file);
       } else 
       {
