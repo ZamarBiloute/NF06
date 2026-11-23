@@ -35,21 +35,23 @@ const char *Texte_Demarrage[] = {
 const char *Menu_Principal_Options[] = {
     " 1. Espace client                        ",
     " 2. Espace administrateur                ",
-    " 3. Enregistrer et quitter l’application "
+    " 3. Enregistrer et quitter l’application ",
+    NULL
 };
 #define MENU_PRINCIPAL_NOMBRE_LIGNE (sizeof(Menu_Principal_Options) / sizeof(Menu_Principal_Options[0]))
 
 // Menu spécifique au menu client
-const char *Menu_Principal_Options[] = {
+const char *Menu_Client_Options[] = {
   " 1. Ajouter un produit au panier  ",
   " 2. Afficher le panier            ",
   " 3. Valider le panier             ",
-  " 4. Abandonner et vider le panier "
+  " 4. Abandonner et vider le panier ",
+  NULL
 };
 #define MENU_CLIENTL_NOMBRE_LIGNE (sizeof(Menu_Principal_Options) / sizeof(Menu_Principal_Options[0]))
 
 // Déclaration des fonctions internes utilisées pour afficher les menus
-void Afficher_Menu(const char *message,bool selectionner);
+void Afficher_Option_Menu(const char *message,bool selectionner);
 static void Afficher_Texte(const char *TabTxt[]);
 
 /**
@@ -77,19 +79,19 @@ void Afficher_Texte_Demarrage(void) {
 }
 
 /**
- * @brief Affiche le menu principale.
+ * @brief Affiche un menu .
  *
- * @param[in]  Rien.
+ * @param[in]  const char contenant le texte des menus.
  *
  * @return Rien
  */
 
-void Afficher_Menu_Principal(void) {
-  for (unsigned char i = 0; i < MENU_PRINCIPAL_NOMBRE_LIGNE; i++) {
+void Afficher_Menu(const char *TabTxt[]) {
+  for (size_t i = 0; TabTxt[i] != NULL; i++) {
     if (i + 1 == Numero_Choix_Selectionner) {
-      Afficher_Menu(Menu_Principal_Options[i], true);
+      Afficher_Option_Menu(TabTxt[i], true);
     } else {
-      Afficher_Menu(Menu_Principal_Options[i], false);
+      Afficher_Option_Menu(TabTxt[i], false);
     }
   }
 }
@@ -104,7 +106,7 @@ void Afficher_Menu_Principal(void) {
 
 static void Afficher_Texte(const char *TabTxt[]) {
   for (size_t i = 0; TabTxt[i] != NULL; i++) {
-    Afficher_Menu(TabTxt[i], false);
+    Afficher_Option_Menu(TabTxt[i], false);
   }
 }
 
@@ -116,7 +118,7 @@ static void Afficher_Texte(const char *TabTxt[]) {
  *
  * @return Rien
  */
-void Afficher_Menu(const char *message, bool selectionner) {
+void Afficher_Option_Menu(const char *message, bool selectionner) {
   
   if (selectionner) {
     printf(ANSI_NOIR_FOND_BLANC"%s"ANSI_RESET"\n", message);
@@ -139,7 +141,7 @@ ENUM_CHOIX_MP Affiche_Et_Gere_Menu_Principal(void) {
   bool Maj = false;
   ENUM_CHOIX_MP Choix = CHOIX_MP_UNDEF;
 
-  Afficher_Menu_Principal();
+  Afficher_Menu(Menu_Principal_Options);
   while (Sortie == false) {
     int touche = _getch();
     switch (touche) 
@@ -154,13 +156,13 @@ ENUM_CHOIX_MP Affiche_Et_Gere_Menu_Principal(void) {
                 if (Numero_Choix_Selectionner - 1 > 0) {
                     Numero_Choix_Selectionner--;
                 } else {
-                    Numero_Choix_Selectionner = MENU_PRINCIPAL_NOMBRE_LIGNE;
+                    Numero_Choix_Selectionner = MENU_PRINCIPAL_NOMBRE_LIGNE - 1;
                 }
             } break;
             case TOUCHE_FLECHE_BAS:
             {
               Maj = true;
-                if (Numero_Choix_Selectionner < MENU_PRINCIPAL_NOMBRE_LIGNE) {
+                if (Numero_Choix_Selectionner < MENU_PRINCIPAL_NOMBRE_LIGNE - 1) {
                     Numero_Choix_Selectionner++;
                 } else {
                     Numero_Choix_Selectionner = 1;
@@ -172,8 +174,8 @@ ENUM_CHOIX_MP Affiche_Et_Gere_Menu_Principal(void) {
           }
           if (Maj) {
             Maj = false;
-            ANSI_DEPLACEMENT_HAUT((unsigned int)MENU_PRINCIPAL_NOMBRE_LIGNE);
-            Afficher_Menu_Principal();
+            ANSI_DEPLACEMENT_HAUT((unsigned int)MENU_PRINCIPAL_NOMBRE_LIGNE-1);
+            Afficher_Menu(Menu_Principal_Options);
           }
       } break;
       case TOUCHE_1:
@@ -195,9 +197,9 @@ ENUM_CHOIX_MP Affiche_Et_Gere_Menu_Principal(void) {
       {
         switch (Numero_Choix_Selectionner)
         {
-          case TOUCHE_1: Choix = CHOIX_MP_ESPACE_CLIENT; break;
-          case TOUCHE_2: Choix = CHOIX_MP_ESPACE_ADMIN; break;
-          case TOUCHE_3: Choix = CHOIX_MP_QUITTER; break;
+          case 1: Choix = CHOIX_MP_ESPACE_CLIENT; break;
+          case 2: Choix = CHOIX_MP_ESPACE_ADMIN; break;
+          case 3: Choix = CHOIX_MP_QUITTER; break;
           default: Choix = CHOIX_MP_UNDEF; break;
         }
 
@@ -205,6 +207,91 @@ ENUM_CHOIX_MP Affiche_Et_Gere_Menu_Principal(void) {
       } break;
     }
   }
+
+  return Choix;
+}
+
+/**
+ * @brief Affiche le menu principal et le gère (gestion du curseur).
+ *
+ * @param[in]  Rien.
+ *
+ * @return ENUM_CHOIX_MP qui correspond au choix de valider par l'utilisateur.
+ */
+
+ENUM_CHOIX_MC Affiche_Et_Gere_Menu_Client(void) {
+
+  bool Sortie = false;
+  bool Maj = false;
+  ENUM_CHOIX_MC Choix = CHOIX_MC_UNDEF;
+
+  system("cls");
+  Afficher_Menu(Menu_Client_Options);
+  // while (Sortie == false) {
+  //   int touche = _getch();
+  //   switch (touche) 
+  //   {
+  //     case TOUCHE_SPECIALE:
+  //     {
+  //       int code_touche = _getch();
+  //         switch (code_touche) {
+  //           case TOUCHE_FLECHE_HAUT:
+  //           {
+  //             Maj = true;
+  //               if (Numero_Choix_Selectionner - 1 > 0) {
+  //                   Numero_Choix_Selectionner--;
+  //               } else {
+  //                   Numero_Choix_Selectionner = MENU_PRINCIPAL_NOMBRE_LIGNE;
+  //               }
+  //           } break;
+  //           case TOUCHE_FLECHE_BAS:
+  //           {
+  //             Maj = true;
+  //               if (Numero_Choix_Selectionner < MENU_PRINCIPAL_NOMBRE_LIGNE) {
+  //                   Numero_Choix_Selectionner++;
+  //               } else {
+  //                   Numero_Choix_Selectionner = 1;
+  //               }
+  //           } break;
+            
+  //           default:
+  //           break;
+  //         }
+  //         if (Maj) {
+  //           Maj = false;
+  //           ANSI_DEPLACEMENT_HAUT((unsigned int)MENU_PRINCIPAL_NOMBRE_LIGNE);
+  //           Afficher_Menu_Principal();
+  //         }
+  //     } break;
+  //     case TOUCHE_1:
+  //     {
+  //       Choix = CHOIX_MP_ESPACE_CLIENT;
+  //       Sortie = true;
+  //     } break;
+  //     case TOUCHE_2:
+  //     {
+  //       Choix = CHOIX_MP_ESPACE_ADMIN;
+  //       Sortie = true;
+  //     } break;
+  //     case TOUCHE_3:
+  //     {
+  //       Choix = CHOIX_MP_QUITTER;
+  //       Sortie = true;
+  //     } break;
+  //     case TOUCHE_ENTREE:
+  //     {
+  //       switch (Numero_Choix_Selectionner)
+  //       {
+  //         case TOUCHE_1: Choix = CHOIX_MP_ESPACE_CLIENT; break;
+  //         case TOUCHE_2: Choix = CHOIX_MP_ESPACE_ADMIN; break;
+  //         case TOUCHE_3: Choix = CHOIX_MP_QUITTER; break;
+  //         default: Choix = CHOIX_MP_UNDEF; break;
+  //       }
+
+  //       Sortie = true;
+  //     } break;
+  //   }
+  // }
 
   return Choix;
 }

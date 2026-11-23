@@ -9,7 +9,8 @@
 int main(void) {
 
     /* Variables locales */
-    unsigned char choix_utilisateur = 0;
+    ENUM_CHOIX_MP choix_utilisateur = CHOIX_MP_UNDEF;
+    
     /* Point d'entree */
     Afficher_Texte_Demarrage();
 
@@ -17,22 +18,24 @@ int main(void) {
         fprintf(stderr, "Erreur lors du chargement du stock.\n");
         return EXIT_FAILURE;
     }
+    
     // Affichage du nombre de produits chargés depuis le stock actuel
     printf(ANSI_VERT "Etat du stock actuel : %u produits chargés." ANSI_RESET "\n", nombre_produits);
 
     choix_utilisateur = Affiche_Et_Gere_Menu_Principal();
+    printf("Choix : %d",choix_utilisateur);
     switch (choix_utilisateur)
     {
         case CHOIX_MP_ESPACE_CLIENT:
         {
-            Menu_Client();
+            Affiche_Et_Gere_Menu_Client();
         } break;
 
         case CHOIX_MP_ESPACE_ADMIN:
         {
 
         } break;
-
+        default:
         case CHOIX_MP_QUITTER:
         {
 
