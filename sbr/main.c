@@ -18,7 +18,28 @@ int main(void) {
         return EXIT_FAILURE;
     }
     
-    choix_utilisateur = Menu(MENU_PRINCIPAL);
+    while (choix_utilisateur != CHOIX_MP_QUITTER)
+    {
+      choix_utilisateur = Menu(MENU_PRINCIPAL);
+      switch (choix_utilisateur)
+      {
+        case CHOIX_MP_ESPACE_CLIENT:
+        {
+          Menu(MENU_CLIENT);
+        } break;
+        
+        case CHOIX_MP_ESPACE_ADMIN:
+        {
+
+        } break;
+        default:
+        case CHOIX_MP_QUITTER:
+        {
+
+        } break;
+
+      }
+    }
 
     /* Point de sortie */
     return EXIT_SUCCESS;

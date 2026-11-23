@@ -35,6 +35,7 @@ const char *Texte_Demarrage[] = {
 #define TEXTE_DEMARRAGE_NOMBRE_LIGNE (sizeof(Texte_Demarrage) / sizeof(Texte_Demarrage[0]))
 
 // Menu spécifique au menu de démarrage
+#define TITRE_MENU_PRINCIPAL "============= SYSTEME DE GESTION DU MAGASIN =============="
 const char *Menu_Principal_Options[] = {
     " 1. Espace client                        ",
     " 2. Espace administrateur                ",
@@ -44,6 +45,7 @@ const char *Menu_Principal_Options[] = {
 #define MENU_PRINCIPAL_NOMBRE_LIGNE (sizeof(Menu_Principal_Options) / sizeof(Menu_Principal_Options[0]))
 
 // Menu spécifique au menu client
+#define TITRE_MENU_CLIENT "================ ESPACE CLIENT ================"
 const char *Menu_Client_Options[] = {
   " 1. Ajouter un produit au panier  ",
   " 2. Afficher le panier            ",
@@ -163,20 +165,32 @@ ENUM_CHOIX Affiche_Et_Gere_Menu(MENU Menu) {
     } break;    
   }
 
-
+  // Permet de connaitre le nombre de ligne et donc le nombre de choix dans le menu
   while (PtrMenu[Nombre_Ligne_Menu] != NULL) 
   {
     ++Nombre_Ligne_Menu;
   }
 
   system("cls");
-  if (Menu == MENU_PRINCIPAL)
+  // Permet d'afficher des infos avant le menu
+  switch (Menu)
   {
-    Afficher_Texte_Demarrage();
-    // Affichage du nombre de produits chargés depuis le stock actuel
-    printf(ANSI_VERT "Etat du stock actuel : %u produits chargés." ANSI_RESET "\n", nombre_produits);
+    case MENU_PRINCIPAL:
+    {
+      Afficher_Texte_Demarrage();
+      // Affichage du nombre de produits chargés depuis le stock actuel
+      printf(ANSI_VERT "Etat du stock actuel : %u produits chargés." ANSI_RESET "\n", nombre_produits);
+      printf(TITRE_MENU_PRINCIPAL "\n");
+
+    } break;
+
+    case MENU_CLIENT:
+    {
+      printf(TITRE_MENU_CLIENT "\n");
+    } break;
 
   }
+
   Afficher_Menu(PtrMenu);
   while (Sortie == false) {
     int touche = _getch();
@@ -251,9 +265,9 @@ ENUM_CHOIX Affiche_Et_Gere_Menu(MENU Menu) {
       {
         switch (Numero_Choix_Selectionner)
         {
-          case TOUCHE_1: Choix = CHOIX_MP_ESPACE_CLIENT; break;
-          case TOUCHE_2: Choix = CHOIX_MP_ESPACE_ADMIN; break;
-          case TOUCHE_3: Choix = CHOIX_MP_QUITTER; break;
+          case 1: Choix = CHOIX_MP_ESPACE_CLIENT; break;
+          case 2: Choix = CHOIX_MP_ESPACE_ADMIN; break;
+          case 3: Choix = CHOIX_MP_QUITTER; break;
           default: Choix = CHOIX_MP_UNDEF; break;
         }
 
