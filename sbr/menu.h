@@ -1,10 +1,14 @@
 #pragma once
 
-#include "const.h" 
+#include "const.h"
 
-void Afficher_Texte_Demarrage(void);
-// void Afficher_Menu_Principal(const char *TabTxt[]);
+// Liste des enum
+typedef enum {
+  MENU_PRINCIPAL,
+  MENU_CLIENT,
+  MENU_ADMIN
+} MENU;
 
-ENUM_CHOIX_MP Affiche_Et_Gere_Menu_Principal(void);
+// Liste des fonctions
 
-ENUM_CHOIX_MC Affiche_Et_Gere_Menu_Client(void);
+ENUM_CHOIX Menu(MENU Menu);

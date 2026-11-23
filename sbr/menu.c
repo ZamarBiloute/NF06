@@ -6,6 +6,9 @@
 #include "version.h"
 #include "const.h"
 #include "tools.h"
+#include "menu.h"
+#include "data.h"
+
 //-------------------------------------------------------------------------------------------------------------------
 // Liste de variable locale
 //-------------------------------------------------------------------------------------------------------------------
@@ -135,13 +138,46 @@ void Afficher_Option_Menu(const char *message, bool selectionner) {
  * @return ENUM_CHOIX_MP qui correspond au choix de valider par l'utilisateur.
  */
 
-ENUM_CHOIX_MP Affiche_Et_Gere_Menu_Principal(void) {
+ENUM_CHOIX Affiche_Et_Gere_Menu(MENU Menu) {
 
   bool Sortie = false;
   bool Maj = false;
-  ENUM_CHOIX_MP Choix = CHOIX_MP_UNDEF;
+  ENUM_CHOIX Choix = CHOIX_MC_UNDEF;
+  Numero_Choix_Selectionner = 1;
+  unsigned char Nombre_Ligne_Menu = 0;
+  const char ** PtrMenu = NULL;
 
-  Afficher_Menu(Menu_Principal_Options);
+  switch (Menu)
+  {
+    case MENU_PRINCIPAL:
+    {
+      PtrMenu = Menu_Principal_Options;
+    } break;
+    case MENU_CLIENT:
+    {
+      PtrMenu = Menu_Client_Options;
+    } break;    
+    case MENU_ADMIN:
+    {
+      PtrMenu = Menu_Client_Options;
+    } break;    
+  }
+
+
+  while (PtrMenu[Nombre_Ligne_Menu] != NULL) 
+  {
+    ++Nombre_Ligne_Menu;
+  }
+
+  system("cls");
+  if (Menu == MENU_PRINCIPAL)
+  {
+    Afficher_Texte_Demarrage();
+    // Affichage du nombre de produits chargés depuis le stock actuel
+    printf(ANSI_VERT "Etat du stock actuel : %u produits chargés." ANSI_RESET "\n", nombre_produits);
+
+  }
+  Afficher_Menu(PtrMenu);
   while (Sortie == false) {
     int touche = _getch();
     switch (touche) 
@@ -156,13 +192,13 @@ ENUM_CHOIX_MP Affiche_Et_Gere_Menu_Principal(void) {
                 if (Numero_Choix_Selectionner - 1 > 0) {
                     Numero_Choix_Selectionner--;
                 } else {
-                    Numero_Choix_Selectionner = MENU_PRINCIPAL_NOMBRE_LIGNE - 1;
+                    Numero_Choix_Selectionner = Nombre_Ligne_Menu;
                 }
             } break;
             case TOUCHE_FLECHE_BAS:
             {
               Maj = true;
-                if (Numero_Choix_Selectionner < MENU_PRINCIPAL_NOMBRE_LIGNE - 1) {
+                if (Numero_Choix_Selectionner < Nombre_Ligne_Menu) {
                     Numero_Choix_Selectionner++;
                 } else {
                     Numero_Choix_Selectionner = 1;
@@ -174,32 +210,50 @@ ENUM_CHOIX_MP Affiche_Et_Gere_Menu_Principal(void) {
           }
           if (Maj) {
             Maj = false;
-            ANSI_DEPLACEMENT_HAUT((unsigned int)MENU_PRINCIPAL_NOMBRE_LIGNE-1);
-            Afficher_Menu(Menu_Principal_Options);
+            ANSI_DEPLACEMENT_HAUT((unsigned int)Nombre_Ligne_Menu);
+            Afficher_Menu(PtrMenu);
           }
       } break;
       case TOUCHE_1:
       {
-        Choix = CHOIX_MP_ESPACE_CLIENT;
+        if (Menu == MENU_PRINCIPAL)
+          Choix = CHOIX_MP_ESPACE_CLIENT;
+        else if (Menu == MENU_CLIENT)
+          Choix = CHOIX_MC_AJOUTER_PRODUIT;
+
         Sortie = true;
       } break;
       case TOUCHE_2:
       {
-        Choix = CHOIX_MP_ESPACE_ADMIN;
+        if (Menu == MENU_PRINCIPAL)
+          Choix = CHOIX_MP_ESPACE_ADMIN;
+        else if (Menu == MENU_CLIENT)
+          Choix = CHOIX_MC_AFFICHER_PANIER;
+
         Sortie = true;
       } break;
       case TOUCHE_3:
       {
-        Choix = CHOIX_MP_QUITTER;
+        if (Menu == MENU_PRINCIPAL)
+          Choix = CHOIX_MP_QUITTER;
+        else if (Menu == MENU_CLIENT)
+          Choix = CHOIX_MC_VALIDER_PANIER;
+
+        Sortie = true;
+      } break;
+      case TOUCHE_4:
+      {
+        if (Menu == MENU_CLIENT)
+          Choix = CHOIX_MC_ABANDONNER_ET_VIDER_PANIER;
         Sortie = true;
       } break;
       case TOUCHE_ENTREE:
       {
         switch (Numero_Choix_Selectionner)
         {
-          case 1: Choix = CHOIX_MP_ESPACE_CLIENT; break;
-          case 2: Choix = CHOIX_MP_ESPACE_ADMIN; break;
-          case 3: Choix = CHOIX_MP_QUITTER; break;
+          case TOUCHE_1: Choix = CHOIX_MP_ESPACE_CLIENT; break;
+          case TOUCHE_2: Choix = CHOIX_MP_ESPACE_ADMIN; break;
+          case TOUCHE_3: Choix = CHOIX_MP_QUITTER; break;
           default: Choix = CHOIX_MP_UNDEF; break;
         }
 
@@ -211,87 +265,8 @@ ENUM_CHOIX_MP Affiche_Et_Gere_Menu_Principal(void) {
   return Choix;
 }
 
-/**
- * @brief Affiche le menu principal et le gère (gestion du curseur).
- *
- * @param[in]  Rien.
- *
- * @return ENUM_CHOIX_MP qui correspond au choix de valider par l'utilisateur.
- */
+ENUM_CHOIX Menu(MENU Menu)
+{
+  return Affiche_Et_Gere_Menu(Menu);
 
-ENUM_CHOIX_MC Affiche_Et_Gere_Menu_Client(void) {
-
-  bool Sortie = false;
-  bool Maj = false;
-  ENUM_CHOIX_MC Choix = CHOIX_MC_UNDEF;
-
-  system("cls");
-  Afficher_Menu(Menu_Client_Options);
-  // while (Sortie == false) {
-  //   int touche = _getch();
-  //   switch (touche) 
-  //   {
-  //     case TOUCHE_SPECIALE:
-  //     {
-  //       int code_touche = _getch();
-  //         switch (code_touche) {
-  //           case TOUCHE_FLECHE_HAUT:
-  //           {
-  //             Maj = true;
-  //               if (Numero_Choix_Selectionner - 1 > 0) {
-  //                   Numero_Choix_Selectionner--;
-  //               } else {
-  //                   Numero_Choix_Selectionner = MENU_PRINCIPAL_NOMBRE_LIGNE;
-  //               }
-  //           } break;
-  //           case TOUCHE_FLECHE_BAS:
-  //           {
-  //             Maj = true;
-  //               if (Numero_Choix_Selectionner < MENU_PRINCIPAL_NOMBRE_LIGNE) {
-  //                   Numero_Choix_Selectionner++;
-  //               } else {
-  //                   Numero_Choix_Selectionner = 1;
-  //               }
-  //           } break;
-            
-  //           default:
-  //           break;
-  //         }
-  //         if (Maj) {
-  //           Maj = false;
-  //           ANSI_DEPLACEMENT_HAUT((unsigned int)MENU_PRINCIPAL_NOMBRE_LIGNE);
-  //           Afficher_Menu_Principal();
-  //         }
-  //     } break;
-  //     case TOUCHE_1:
-  //     {
-  //       Choix = CHOIX_MP_ESPACE_CLIENT;
-  //       Sortie = true;
-  //     } break;
-  //     case TOUCHE_2:
-  //     {
-  //       Choix = CHOIX_MP_ESPACE_ADMIN;
-  //       Sortie = true;
-  //     } break;
-  //     case TOUCHE_3:
-  //     {
-  //       Choix = CHOIX_MP_QUITTER;
-  //       Sortie = true;
-  //     } break;
-  //     case TOUCHE_ENTREE:
-  //     {
-  //       switch (Numero_Choix_Selectionner)
-  //       {
-  //         case TOUCHE_1: Choix = CHOIX_MP_ESPACE_CLIENT; break;
-  //         case TOUCHE_2: Choix = CHOIX_MP_ESPACE_ADMIN; break;
-  //         case TOUCHE_3: Choix = CHOIX_MP_QUITTER; break;
-  //         default: Choix = CHOIX_MP_UNDEF; break;
-  //       }
-
-  //       Sortie = true;
-  //     } break;
-  //   }
-  // }
-
-  return Choix;
 }

@@ -29,25 +29,40 @@
 #define TOUCHE_FLECHE_HAUT 72
 #define TOUCHE_FLECHE_BAS 80
 #define TOUCHE_ENTREE 13
-#define TOUCHE_3 51
-#define TOUCHE_2 50
 #define TOUCHE_1 49
+#define TOUCHE_2 (TOUCHE_1 + 1)
+#define TOUCHE_3 (TOUCHE_1 + 2)
+#define TOUCHE_4 (TOUCHE_1 + 3)
 
 // Liste des choix du menu principale
+// typedef enum{
+//   CHOIX_MP_UNDEF,
+//   CHOIX_MP_ESPACE_CLIENT,
+//   CHOIX_MP_ESPACE_ADMIN,
+//   CHOIX_MP_QUITTER
+// } ENUM_CHOIX_MP;
+
+
+// Liste des choix du menu client
+// typedef enum{
+//   CHOIX_MC_UNDEF,
+//   CHOIX_MC_AJOUTER_PRODUIT,
+//   CHOIX_MC_AFFICHER_PANIER,
+//   CHOIX_MC_VALIDER_PANIER,
+//   CHOIX_MC_ABANDONNER_ET_VIDER_PANIER
+// } ENUM_CHOIX_MC;
+
 typedef enum{
   CHOIX_MP_UNDEF,
   CHOIX_MP_ESPACE_CLIENT,
   CHOIX_MP_ESPACE_ADMIN,
-  CHOIX_MP_QUITTER
-} ENUM_CHOIX_MP;
+  CHOIX_MP_QUITTER,
 
-
-// Liste des choix du menu client
-typedef enum{
   CHOIX_MC_UNDEF,
   CHOIX_MC_AJOUTER_PRODUIT,
   CHOIX_MC_AFFICHER_PANIER,
   CHOIX_MC_VALIDER_PANIER,
   CHOIX_MC_ABANDONNER_ET_VIDER_PANIER
-} ENUM_CHOIX_MC;
+
+} ENUM_CHOIX;
 
