@@ -1,5 +1,6 @@
 #include <stdbool.h>
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 
 #include "tools.h"
@@ -8,24 +9,23 @@
 #include "Const.h"
 
 Produit * stock = NULL;
+unsigned int * IndexCategorie = NULL;
 unsigned int nombre_produits = 0;
+unsigned int nombre_categories = 0;
 FILE *file = NULL;
 
 // Liste des fonctions internes à ce fichier
 unsigned int OpenCheckStockFileAndReturnProductCount(void);
+bool SetListOfCategorie(void);
 
-// Fonction qui permet de charger en mémoire le stock qui est defini 
-// dans le fichier stock.txt
-// ------------------------------------------------------------------
-// Voici le format du fichier stock.txt :
-// Nom de la catégorie;Nom du produit;Prix;Stock
-// Exemple : Electronique;Smartphone;699.99;50
-// ------------------------------------------------------------------
-// Paramètre d'entrée : aucun
-// Paramètre de sortie : true si le chargement s'est bien déroulé, sinon false
-// ------------------------------------------------------------------
-
-bool charger_stock(void) {
+/**
+ * @brief Charge en mémoire (RAM) le stock qui est dans un fichier texte et gère l'espace client.
+ *
+ * @param[in]  Rien.
+ *
+ * @return true si le chargement s'est bien déroulé, sinon false
+ */
+bool Charger_Stock(void) {
   
   /* Variables locales */
   bool Result = true;
@@ -42,7 +42,7 @@ bool charger_stock(void) {
           Result = false;
       } else {
           for (unsigned int i = 0; i < nombre_produits; i++) {
-              if (fscanf(file, "%99[^;];%99[^;];%f;%d\n", stock[i].categorie, stock[i].nom, &stock[i].prix, &stock[i].stock) != 4) {
+              if (fscanf(file, "%99[^;];%99[^;];%f;%d\n", stock[i].nom, stock[i].categorie, &stock[i].prix, &stock[i].stock) != 4) {
                   // Les 4 champs n'ont pu etre lus correctement, donc on considère que le chargement a échoué
                   AFF_DEBUG("Problème de lecture du fichier\n");
                   Result = false;
@@ -59,12 +59,26 @@ bool charger_stock(void) {
   if (Result == false) {
       free(stock);
       stock = NULL;
+  } else {
+    if ( SetListOfCategorie() == false)
+    {
+      free(stock);
+      stock = NULL;
+    }
   }
+
 
   /* Point de sortie */
   return Result;
 }
  
+/**
+ * @brief Permet d'ouvrir le fichier texte contenant le stock et de retourner le nombre de ligne.
+ * Ce nombre de ligne correspond finalement au nombre de produit dans le stock.
+ * @param[in]  Rien.
+ *
+ * @return unsigned int nombre de produit en stock.
+ */
 unsigned int OpenCheckStockFileAndReturnProductCount(void) {
 
   /* Variables locales */
@@ -112,4 +126,65 @@ unsigned int OpenCheckStockFileAndReturnProductCount(void) {
 
   /* Point de sortie */
   return nombre_lignes;
+}
+
+/**
+ * @brief Depuis le stock en mémoire (RAM), détermine les indices des catégories uniques.
+ * Ceci est necessaire pour ensuite pouvoir afficher cette liste.
+ * @param[in]  Rien.
+ *
+ * @return true si le chargement s'est bien déroulé, sinon false
+ */
+bool SetListOfCategorie(void)
+{
+  /* Variables locales */
+  bool CategorieDejaVu = false;
+  
+  if (stock == NULL)
+    nombre_categories = 0;
+  else{
+    for (unsigned int i = 0 ; i < nombre_produits ; i++)
+    {
+      CategorieDejaVu = false;
+      for (unsigned int j = 0 ; j < i ; j++ )
+      {
+        if (strcmp(stock[i].categorie,stock[j].categorie) == 0)
+        {
+          CategorieDejaVu = true;
+          break;
+        }
+      }
+      if ( CategorieDejaVu == false)
+      {
+        nombre_categories ++;
+      }
+    }
+  }
+  IndexCategorie = malloc(nombre_categories);
+
+  if (IndexCategorie == NULL)
+    return false;
+  else
+  {
+    unsigned int Cpt = 0;
+    for (unsigned int i = 0 ; i < nombre_produits ; i++)
+    {
+      CategorieDejaVu = false;
+      for (unsigned int j = 0 ; j < i ; j++ )
+      {
+        if (strcmp(stock[i].categorie,stock[j].categorie) == 0)
+        {
+          CategorieDejaVu = true;
+          break;
+        }
+      }
+      if ( CategorieDejaVu == false)
+      {
+        IndexCategorie[Cpt++] = i;
+      }
+    }
+
+    return true;
+  }
+
 }

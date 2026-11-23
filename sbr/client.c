@@ -9,6 +9,13 @@
 
 #include "client.h"
 
+/**
+ * @brief Affiche et gère l'espace client.
+ *
+ * @param[in]  Rien.
+ *
+ * @return Rien.
+ */
 void Client(void)
 {
   ENUM_CHOIX choix_utilisateur = CHOIX_MP_UNDEF;
@@ -22,6 +29,10 @@ void Client(void)
       {
         // Pour ajouter un produit, il faut d'abord afficher la liste des catégories
         // afin de permettre un filtre.
+        // Il faut afficher la liste des categories grace à la variable IndexCategorie[] et nombre_categories
+        for (unsigned int cpt = 0 ; cpt < nombre_categories ; cpt++)
+        printf("%s\n",stock[IndexCategorie[cpt]].categorie);
+        getchar();
         
         
       } break;

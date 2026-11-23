@@ -15,7 +15,7 @@ int main(void) {
     
     /* Point d'entree */
 
-    if (charger_stock() == false) {
+    if (Charger_Stock() == false) {
         fprintf(stderr, "Erreur lors du chargement du stock.\n");
         return EXIT_FAILURE;
     }

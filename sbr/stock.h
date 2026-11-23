@@ -1,3 +1,3 @@
 #pragma once
 #include <stdbool.h>
-bool charger_stock(void);
+bool Charger_Stock(void);

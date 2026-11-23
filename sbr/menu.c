@@ -180,6 +180,7 @@ ENUM_CHOIX Affiche_Et_Gere_Menu(MENU Menu) {
       Afficher_Texte_Demarrage();
       // Affichage du nombre de produits chargés depuis le stock actuel
       printf(ANSI_VERT "Etat du stock actuel : %u produits chargés." ANSI_RESET "\n", nombre_produits);
+      printf(ANSI_VERT "Nombre de catégorie : %u." ANSI_RESET "\n", nombre_categories);
       printf(TITRE_MENU_PRINCIPAL "\n");
 
     } break;
