@@ -58,7 +58,7 @@ const char *Menu_Client_Options[] = {
 // Déclaration des fonctions internes utilisées pour afficher les menus
 void Afficher_Option_Menu(const char *message,bool selectionner);
 static void Afficher_Texte(const char *TabTxt[]);
-
+ENUM_CHOIX RetourneEnumChoixEnFonctionDeLaTouche(unsigned char Touche,MENU Menu);
 /**
  * @brief Affiche tous les textes lors du démarrage du programme.
  *
@@ -186,6 +186,9 @@ ENUM_CHOIX Affiche_Et_Gere_Menu(MENU Menu) {
 
     case MENU_CLIENT:
     {
+      Afficher_Texte_Demarrage();
+      // Affichage du nombre de produits chargés depuis le stock actuel
+      printf(ANSI_VERT "Etat du stock actuel : %u produits chargés." ANSI_RESET "\n", nombre_produits);
       printf(TITRE_MENU_CLIENT "\n");
     } break;
 
@@ -263,14 +266,7 @@ ENUM_CHOIX Affiche_Et_Gere_Menu(MENU Menu) {
       } break;
       case TOUCHE_ENTREE:
       {
-        switch (Numero_Choix_Selectionner)
-        {
-          case 1: Choix = CHOIX_MP_ESPACE_CLIENT; break;
-          case 2: Choix = CHOIX_MP_ESPACE_ADMIN; break;
-          case 3: Choix = CHOIX_MP_QUITTER; break;
-          default: Choix = CHOIX_MP_UNDEF; break;
-        }
-
+        Choix = RetourneEnumChoixEnFonctionDeLaTouche(Numero_Choix_Selectionner,Menu);
         Sortie = true;
       } break;
     }
@@ -278,6 +274,61 @@ ENUM_CHOIX Affiche_Et_Gere_Menu(MENU Menu) {
 
   return Choix;
 }
+
+/**
+ * @brief Affiche le menu et gère le menu correspondant au parametre.
+ *
+ * @param[in]  MENU.
+ *
+ * @return ENUM_CHOIX qui correspond au choix valider par l'utilisateur.
+ */
+ENUM_CHOIX RetourneEnumChoixEnFonctionDeLaTouche(unsigned char Touche,MENU Menu)
+{
+  ENUM_CHOIX Choix = CHOIX_MP_UNDEF;
+
+  switch (Menu)
+  {
+    case MENU_PRINCIPAL:
+    {
+      switch (Touche)
+      {
+        case 1: Choix = CHOIX_MP_ESPACE_CLIENT; break;
+        case 2: Choix = CHOIX_MP_ESPACE_ADMIN; break;
+        case 3: Choix = CHOIX_MP_QUITTER; break;
+        default: Choix = CHOIX_MP_UNDEF; break;
+      }
+
+    } break;
+    
+    case MENU_CLIENT:
+    {
+      switch (Touche)
+      {
+        case 1: Choix = CHOIX_MC_AJOUTER_PRODUIT; break;
+        case 2: Choix = CHOIX_MC_AFFICHER_PANIER; break;
+        case 3: Choix = CHOIX_MC_VALIDER_PANIER; break;
+        case 4: Choix = CHOIX_MC_ABANDONNER_ET_VIDER_PANIER; break;
+        default: Choix = CHOIX_MC_UNDEF; break;
+      }
+
+    } break;
+    
+    case MENU_ADMIN:
+    {
+
+    } break;
+  }
+  return Choix;
+}
+
+
+/**
+ * @brief Affiche le menu et gère le menu correspondant au parametre.
+ *
+ * @param[in]  MENU.
+ *
+ * @return ENUM_CHOIX qui correspond au choix valider par l'utilisateur.
+ */
 
 ENUM_CHOIX Menu(MENU Menu)
 {

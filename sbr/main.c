@@ -6,6 +6,8 @@
 #include "tools.h"
 #include "const.h"
 
+#include "client.h"
+
 int main(void) {
 
     /* Variables locales */
@@ -25,7 +27,7 @@ int main(void) {
       {
         case CHOIX_MP_ESPACE_CLIENT:
         {
-          Menu(MENU_CLIENT);
+          Client();
         } break;
         
         case CHOIX_MP_ESPACE_ADMIN:
